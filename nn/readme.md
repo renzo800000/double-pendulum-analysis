@@ -1,3 +1,4 @@
+# Neural network prediction model
 This folder contains the code of the neural network model used for predicting the behaviour of the double-pendulum system. All scripts use the model saved in the 'storage/models/current' folder. To learn how to save or load different models, please refer to 'storage/models/readme.md'.
 
 # File meanings

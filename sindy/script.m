@@ -2,9 +2,6 @@ clear all
 close all
 clc
 
-%Add the SINDy library (see report for library source attribution)
-addpath("./sindy_library/utils")
-
 %% Define parameters and prepare data
 n = 4; %2D system with velocities
 

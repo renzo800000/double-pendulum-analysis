@@ -176,13 +176,15 @@ def plot_average_endpoint_distance(trajectory_a, trajectory_b, L1=1, L2=1.5, dt=
     ax.set_title("Average distance between double pendulum endpoints")
     ax.set_xlabel("Frame (dt=" + str(dt) + ")")
     ax.set_ylabel("Avg. endpoint distance")
+    ax.set_xlim([-5, 205])
+    ax.set_ylim([-0.2, 3.2])
     
     ax.plot(dist)
     
     fig.show()
     
     
-def visualize_trajectories(trajectories, labels=None, L1=1, L2=1.5, dt=0.05, speed=1):
+def visualize_trajectories(trajectories, labels=None, L1=1, L2=1.5, dt=0.05, speed=1, save_gif=False):
     
     if(trajectories.ndim == 2):
         trajectories = trajectories[None, ...]
@@ -311,6 +313,13 @@ def visualize_trajectories(trajectories, labels=None, L1=1, L2=1.5, dt=0.05, spe
     ani1.running = True
     ani1.direction = +1
     ani1.last_frame = None
+    
+    if save_gif:
+        print("Saving animation to gif...")
+        f = r"animation.gif" 
+        writergif = animation.PillowWriter(fps= 40*speed) 
+        ani1.save(f, writer=writergif)
+        print("Saving animation done")
     
     plt.show()
     

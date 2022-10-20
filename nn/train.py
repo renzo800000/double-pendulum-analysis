@@ -81,7 +81,6 @@ if __name__ == '__main__':
     fit_result = model.fit(
         train_ds,
         validation_data = test_ds,
-        #batchesPerEpoch = len(train_ds),
         epochs = EPOCHS
         )
     

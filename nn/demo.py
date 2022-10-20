@@ -30,7 +30,7 @@ DATA_SOURCE = "test"
 
 # Create a plot of the distance between the endpoints of the reference and 
 # the predicted trajectory. (Creates one figure with a line per trajectory)
-PLOT_ENDPOINT_DISTANCES = False
+PLOT_ENDPOINT_DISTANCES = True
 
 # Create a plot of the average distance between the endpoints of 
 # the reference and the predicted trajectory. Averaged over all trajectories.
@@ -48,7 +48,7 @@ VISUALIZE_TRAJECTORIES = False
 ##############################################################################
 
 INPUT_SIZE = 10
-OUTPUT_SIZE = 10
+OUTPUT_SIZE = 1
 
 model = common.RNN_model.load()
 model.summary()
@@ -116,4 +116,4 @@ if PLOT_ENDPOINT_DISTANCES:
 if VISUALIZE_TRAJECTORIES:
     for i in range(ground_truth.shape[0]):
         both = np.concatenate((predicted_traj[i:i+1, :, :], ground_truth[i:i+1, :, :]), axis=0)
-        ani1 = common.visualize_trajectories(both, labels=("Predicted trajectory", "Ground truth"), speed=0.25)
+        ani1 = common.visualize_trajectories(both, labels=("Predicted trajectory", "Ground truth"), speed=0.25, save_gif=False)

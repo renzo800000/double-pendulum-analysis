@@ -55,24 +55,47 @@ class RNN_model(ks.Model):
     @staticmethod
     def load(path = "storage/model/current"):
         if os.path.exists(path):
-          return ks.models.load_model(path, compile=False)
+            return ks.models.load_model(path, compile=False)
       
-        raise Exception("There is currently no neural network model selected.\nPlease see the readme.md file in the folder 'storage/model' on how to select a model.");
+        raise Exception("There is currently no valid neural network model selected.\nPlease see the readme.md file in the folder 'storage/model' on how to select a model.");
         
 
 #create a normalization class
 class Normalization:
-    def __init__(self,data):
+    def __init__(self, means, stddevs):
+        self.means = means
+        self.stddevs = stddevs
         
         
-        self.means = []
-        self.stddevs = []
-        
+    @staticmethod
+    def from_data(data):
+        means = []
+        stddevs = []
         
         # find mean and stddev of each column and store in self
         for i in range(data.shape[-1]):
-            self.means.append(np.mean(data[:, :,i]))
-            self.stddevs.append(np.std(data[:, :,i]))
+            means.append(np.mean(data[:, :,i]))
+            stddevs.append(np.std(data[:, :,i]))
+        
+        return Normalization(means, stddevs)
+    
+    @staticmethod
+    def from_model(modelPath = "storage/model/current"):
+        path = modelPath + "/training_info/normalization_data.npy"
+        
+        if os.path.exists(path):
+            norm_data = np.load(path);
+            return Normalization(norm_data[:, 0], norm_data[:, 1])
+        
+        raise Exception("There is currently no valid neural network model selected.\nPlease see the readme.md file in the folder 'storage/model' on how to select a model.");
+        
+    def save_to_model(self, modelPath = "storage/model/current"):
+        path = modelPath + "/training_info/normalization_data.npy"
+        
+        norm_data = np.array([self.means, self.stddevs])
+        norm_data = np.transpose(norm_data)
+        
+        np.save(path, norm_data)
         
     def normalize(self, data):
         
@@ -184,7 +207,7 @@ def plot_average_endpoint_distance(trajectory_a, trajectory_b, L1=1, L2=1.5, dt=
     fig.show()
     
     
-def visualize_trajectories(trajectories, labels=None, L1=1, L2=1.5, dt=0.05, speed=1, save_gif=False):
+def visualize_trajectories(trajectories, labels=None, L1=1, L2=1.5, dt=0.05, speed=1, save_gif=False, gif_filename="animation.gif"):
     
     if(trajectories.ndim == 2):
         trajectories = trajectories[None, ...]
@@ -316,12 +339,10 @@ def visualize_trajectories(trajectories, labels=None, L1=1, L2=1.5, dt=0.05, spe
     
     if save_gif:
         print("Saving animation to gif...")
-        f = r"animation.gif" 
         writergif = animation.PillowWriter(fps= 40*speed) 
-        ani1.save(f, writer=writergif)
+        ani1.save(gif_filename, writer=writergif)
         print("Saving animation done")
     
     plt.show()
-    
     
     return ani1

@@ -53,8 +53,9 @@ OUTPUT_SIZE = 1
 model = common.RNN_model.load()
 model.summary()
 
-data_train = np.load('storage/data/train.npy')
-normalization = common.Normalization(data_train)
+normalization = common.Normalization.from_model()
+
+normalization.save_to_model()
 
 if DATA_SOURCE == "train":
     data = np.load('storage/data/train.npy')

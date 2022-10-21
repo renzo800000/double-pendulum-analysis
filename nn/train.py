@@ -51,7 +51,7 @@ if __name__ == '__main__':
     data_train = np.load('storage/data/train.npy')
     data_test = np.load('storage/data/test.npy')
     
-    normalization = common.Normalization(data_train)
+    normalization = common.Normalization.from_data(data_train)
     
     data_train_norm = normalization.normalize(data_train)
     data_test_norm = normalization.normalize(data_test)
@@ -90,7 +90,8 @@ if __name__ == '__main__':
         
         
     print("Saving model...")
-    model.save(path="storage/model/current")
+    model.save()
+    normalization.save_to_model()
     
     if not os.path.exists("storage/model/current/training_info"):
         os.makedirs("storage/model/current/training_info")
